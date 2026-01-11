@@ -1,26 +1,413 @@
+/**
+ * Global Styles - Shivansh Gupta Portfolio
+ * 
+ * COLOR PALETTE (ColorHunt):
+ * - Primary:   #213448 (Deep Navy) - Main backgrounds
+ * - Secondary: #547792 (Steel Blue) - Accents, borders
+ * - Tertiary:  #94B4C1 (Soft Teal) - Highlights, gradients
+ * - Accent:    #EAE0CF (Warm Cream) - Text, interactive elements
+ * 
+ * ORGANIZATION:
+ * Variables → Base → Components → Utilities → Animations
+ */
+
 @import "tailwindcss";
 
+/* ==========================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   ========================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* New Color Palette */
+  --color-primary: #213448;
+  --color-secondary: #547792;
+  --color-tertiary: #94B4C1;
+  --color-accent: #EAE0CF;
+
+  /* Legacy mappings */
+  --background: #213448;
+  --foreground: #EAE0CF;
+  --glass: rgba(33, 52, 72, 0.65);
+  --glass-border: rgba(234, 224, 207, 0.1);
+
+  /* Gradient colors (updated) */
+  --gradient-a: #547792;
+  --gradient-b: #94B4C1;
+  --gradient-c: #EAE0CF;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ==========================================
+   BASE STYLES
+   ========================================== */
+
+body {
+  background: radial-gradient(circle at 20% 20%,
+      #2a4560,
+      var(--background));
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ==========================================
+   PAGE-LEVEL COMPONENTS
+   ========================================== */
+
+/* Page shell - subtle gradient overlay */
+.page-shell {
+  background-image: radial-gradient(circle at top,
+      rgba(84, 119, 146, 0.25),
+      transparent 55%),
+    radial-gradient(circle at 20% 20%,
+      rgba(148, 180, 193, 0.15),
+      transparent 45%);
+}
+
+/* Glass panel effect */
+.glass-panel {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(234, 224, 207, 0.04);
+}
+
+/* ==========================================
+   FLOATING ORBS (BACKGROUND ANIMATION)
+   ========================================== */
+
+.orb {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  filter: blur(120px);
+  opacity: 0.3;
+  animation: orbDrift 28s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.orb--emerald {
+  background: radial-gradient(circle, #94B4C1 0%, transparent 60%);
+  top: 10%;
+  left: -5%;
+}
+
+.orb--violet {
+  background: radial-gradient(circle, #547792 0%, transparent 60%);
+  bottom: 5%;
+  right: -10%;
+  animation-delay: 6s;
+}
+
+.orb--peach {
+  background: radial-gradient(circle, #EAE0CF 0%, transparent 60%);
+  top: 40%;
+  right: 15%;
+  animation-delay: 3s;
+}
+
+/* ==========================================
+   SKILLS CARDS
+   ========================================== */
+
+.skill-card {
+  clip-path: inset(0 round 28px);
+  background: linear-gradient(135deg,
+      rgba(33, 52, 72, 0.8),
+      rgba(84, 119, 146, 0.3));
+}
+
+.skill-card:hover {
+  background: linear-gradient(135deg,
+      rgba(33, 52, 72, 0.9),
+      rgba(84, 119, 146, 0.5));
+}
+
+/* ==========================================
+   PROJECT CARDS (3D TILT + GLOW)
+   ========================================== */
+
+/* Custom scrollbar for project track */
+.project-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.project-track::-webkit-scrollbar-track {
+  background: rgba(33, 52, 72, 0.5);
+  border-radius: 999px;
+}
+
+.project-track::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--gradient-a), var(--gradient-b));
+  border-radius: 999px;
+}
+
+/* 3D Tilt container */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Glow border effect on hover */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg,
+      var(--gradient-c),
+      var(--gradient-b),
+      var(--gradient-a));
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  filter: blur(8px);
+}
+
+.glow-border:hover::before {
+  opacity: 0.5;
+}
+
+/* ==========================================
+   TIMELINE COMPONENT
+   ========================================== */
+
+/* Timeline animated line */
+.timeline-line {
+  transform-origin: top;
+  background: linear-gradient(to bottom,
+      #94B4C1,
+      #547792,
+      #213448);
+}
+
+/* Timeline dot with glow */
+.timeline-dot {
+  box-shadow:
+    0 0 0 4px var(--background),
+    0 0 20px rgba(148, 180, 193, 0.5);
+  background: linear-gradient(135deg, #94B4C1, #547792);
+}
+
+/* ==========================================
+   CONTACT FORM
+   ========================================== */
+
+/* Floating label form field */
+.form-field {
+  position: relative;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  background: rgba(33, 52, 72, 0.5);
+  color: var(--foreground);
+  border: 1px solid rgba(148, 180, 193, 0.3);
+  border-radius: 20px;
+  padding: 1.1rem 1.25rem 0.4rem;
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: rgba(148, 180, 193, 0.8);
+  box-shadow: 0 0 0 3px rgba(148, 180, 193, 0.2);
+  background: rgba(33, 52, 72, 0.7);
+}
+
+.form-field label {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.2rem;
+  font-size: 0.85rem;
+  color: rgba(234, 224, 207, 0.5);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    font-size 0.2s ease;
+  pointer-events: none;
+}
+
+/* Floating label animation on focus or filled */
+.form-field input:focus+label,
+.form-field textarea:focus+label,
+.form-field input:not(:placeholder-shown)+label,
+.form-field textarea:not(:placeholder-shown)+label {
+  transform: translateY(-0.85rem);
+  font-size: 0.72rem;
+  color: #94B4C1;
+}
+
+/* Contact section gradient background */
+.contact-gradient {
+  background: radial-gradient(circle at 20% 20%,
+      rgba(148, 180, 193, 0.15),
+      transparent 50%),
+    radial-gradient(circle at 80% 20%,
+      rgba(84, 119, 146, 0.15),
+      transparent 55%),
+    rgba(33, 52, 72, 0.85);
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+/* Primary gradient button */
+.btn-primary {
+  background: linear-gradient(135deg, #94B4C1, #547792);
+  color: #213448;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(148, 180, 193, 0.3);
+}
+
+/* Secondary outline button */
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(234, 224, 207, 0.2);
+  color: #EAE0CF;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(234, 224, 207, 0.5);
+  background: rgba(234, 224, 207, 0.05);
+}
+
+/* ==========================================
+   SECTION BACKGROUNDS
+   ========================================== */
+
+.section-dark {
+  background: linear-gradient(135deg,
+      rgba(33, 52, 72, 0.95),
+      rgba(33, 52, 72, 0.8));
+}
+
+.section-gradient {
+  background: linear-gradient(180deg,
+      rgba(33, 52, 72, 1) 0%,
+      rgba(84, 119, 146, 0.2) 50%,
+      rgba(33, 52, 72, 1) 100%);
+}
+
+/* ==========================================
+   KEYFRAME ANIMATIONS
+   ========================================== */
+
+/* Floating orb drift animation */
+@keyframes orbDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate3d(40px, -60px, 0) scale(1.1);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Subtle pulse for timeline dots */
+@keyframes pulse {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 4px var(--background),
+      0 0 20px rgba(148, 180, 193, 0.4);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 6px var(--background),
+      0 0 30px rgba(148, 180, 193, 0.6);
+  }
+}
+
+/* Shimmer effect for buttons */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Float animation */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Scale pulse */
+@keyframes scalePulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Rotate animation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+
+.text-gradient {
+  background: linear-gradient(135deg, #94B4C1, #EAE0CF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: scalePulse 4s ease-in-out infinite;
+}
+
+.border-gradient {
+  border-image: linear-gradient(135deg, #94B4C1, #547792) 1;
 }
